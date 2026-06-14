@@ -7,7 +7,8 @@
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.wadvance.fitnessapp"
     },
     "android": {
       "adaptiveIcon": {
@@ -16,10 +17,17 @@
         "backgroundImage": "./assets/android-icon-background.png",
         "monochromeImage": "./assets/android-icon-monochrome.png"
       },
+      "package": "com.wadvance.fitnessapp",
       "predictiveBackGestureEnabled": false
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "41767b2c-9582-4bc1-bdb7-715a48c69b94"
+      }
+    },
+    "owner": "jamesbar"
   }
 }
