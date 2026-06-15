@@ -32,12 +32,19 @@ if (existsSync(jsDir)) {
 writeFileSync(join(dist, '.nojekyll'), '');
 console.log('Created .nojekyll');
 
-const notFoundPath = join(dist, '404.html');
-if (existsSync(notFoundPath)) {
-  let html404 = readFileSync(notFoundPath, 'utf-8');
-  html404 = html404.replace(/URL='\//g, "URL='/fitness-app/");
-  writeFileSync(notFoundPath, html404);
-  console.log('Fixed paths in 404.html');
-}
+const notFoundContent = `<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>fitness-app</title>
+  <script>
+    sessionStorage.redirect = location.href;
+  </script>
+  <meta http-equiv="refresh" content="0;URL='/fitness-app/'">
+</head>
+<body></body>
+</html>`;
+writeFileSync(join(dist, '404.html'), notFoundContent);
+console.log('Created 404.html');
 
 console.log('Web build complete!');

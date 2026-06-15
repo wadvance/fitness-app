@@ -32,7 +32,7 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "build:web": "node scripts/build-web.mjs",
-    "deploy": "npx gh-pages -d dist"
+    "deploy": "node scripts/deploy.mjs"
   },
   "private": true
 }
