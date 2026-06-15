@@ -2,7 +2,7 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Platform } from 'react-native';
 
 import { useApp } from '../store/AppContext';
 import { colors, fontSize } from '../styles/theme';
@@ -55,11 +55,32 @@ function MainTabs() {
   );
 }
 
+const linking = {
+  enabled: Platform.OS === 'web',
+  prefixes: ['https://wadvance.github.io/fitness-app'],
+  config: {
+    screens: {
+      Onboarding: 'onboarding',
+      Main: {
+        screens: {
+          Inicio: 'inicio',
+          Entreno: 'entreno',
+          Dieta: 'dieta',
+          Perfil: 'perfil',
+        },
+      },
+      ExerciseDetail: 'ejercicio/:id',
+      MealDetail: 'receta/:id',
+      ShoppingList: 'lista-compras',
+    },
+  },
+};
+
 export default function AppNavigator() {
   const { state } = useApp();
 
   return (
-    <NavigationContainer>
+    <NavigationContainer linking={linking}>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         {!state.isOnboarded ? (
           <Stack.Screen name="Onboarding" component={OnboardingScreen} />
