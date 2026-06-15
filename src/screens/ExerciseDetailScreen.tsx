@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { View, Text, ScrollView, StyleSheet } from 'react-native';
-import { colors, spacing, fontSize, borderRadius, shadows } from '../styles/theme';
+import { useTheme, spacing, fontSize, borderRadius, shadows } from '../styles/theme';
 
 export default function ExerciseDetailScreen({ route }: any) {
+  const { colors } = useTheme();
+  const styles = useMemo(() => createStyles(colors), [colors]);
   const { exercise, set } = route.params;
 
   return (
@@ -57,7 +59,7 @@ export default function ExerciseDetailScreen({ route }: any) {
   );
 }
 
-const styles = StyleSheet.create({
+const createStyles = (colors: ReturnType<typeof useTheme>['colors']) => StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.background },
   content: { padding: spacing.lg, paddingBottom: spacing.xxl },
   imagePlaceholder: {

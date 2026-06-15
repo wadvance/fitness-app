@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Meal } from '../models/Meal';
 import { Recipe } from '../models/Meal';
-import { colors, spacing, fontSize, borderRadius, shadows } from '../styles/theme';
+import { useTheme, spacing, fontSize, borderRadius, shadows } from '../styles/theme';
 
 interface Props {
   meal: Meal;
@@ -26,6 +26,9 @@ const mealIcons: Record<string, string> = {
 };
 
 export default function MealCard({ meal, recipe, onPress, onToggle }: Props) {
+  const { colors } = useTheme();
+  const styles = useMemo(() => createStyles(colors), [colors]);
+
   return (
     <TouchableOpacity
       style={[styles.card, meal.completed && styles.completed]}
@@ -57,7 +60,7 @@ export default function MealCard({ meal, recipe, onPress, onToggle }: Props) {
   );
 }
 
-const styles = StyleSheet.create({
+const createStyles = (colors: ReturnType<typeof useTheme>['colors']) => StyleSheet.create({
   card: {
     backgroundColor: colors.surface,
     borderRadius: borderRadius.lg,

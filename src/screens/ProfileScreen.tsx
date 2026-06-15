@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
 import { useApp } from '../store/AppContext';
-import { colors, spacing, fontSize, borderRadius, shadows } from '../styles/theme';
+import { useTheme, spacing, fontSize, borderRadius, shadows } from '../styles/theme';
 import { ACTIVITY_LABELS, GOAL_LABELS, EQUIPMENT_LABELS } from '../utils/constants';
 import { calculateBMI } from '../utils/calculations';
 
 export default function ProfileScreen() {
+  const { colors, isDark, toggleTheme } = useTheme();
+  const styles = useMemo(() => createStyles(colors), [colors]);
   const { state, dispatch } = useApp();
   const { profile, caloricNeeds } = state;
 
@@ -43,7 +45,7 @@ export default function ProfileScreen() {
         </View>
         <View style={styles.row}>
           <Text style={styles.label}>Estatura</Text>
-          <Text style={styles.value}>{profile.height} cm</Text>
+          <Text style={styles.value}>{profile.height} in</Text>
         </View>
         <View style={styles.row}>
           <Text style={styles.label}>Actividad</Text>
@@ -91,6 +93,12 @@ export default function ProfileScreen() {
         </View>
       </View>
 
+      <TouchableOpacity style={styles.themeBtn} onPress={toggleTheme}>
+        <Text style={styles.themeBtnText}>
+          {isDark ? '☀️ Modo claro' : '🌙 Modo oscuro'}
+        </Text>
+      </TouchableOpacity>
+
       <TouchableOpacity style={styles.resetBtn} onPress={handleReset}>
         <Text style={styles.resetBtnText}>Reiniciar perfil</Text>
       </TouchableOpacity>
@@ -98,7 +106,7 @@ export default function ProfileScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const createStyles = (colors: ReturnType<typeof useTheme>['colors']) => StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.background },
   content: { padding: spacing.lg, paddingBottom: spacing.xxl },
   avatarContainer: { alignItems: 'center', marginVertical: spacing.lg },
@@ -133,6 +141,15 @@ const styles = StyleSheet.create({
   },
   label: { fontSize: fontSize.sm, color: colors.textSecondary },
   value: { fontSize: fontSize.sm, fontWeight: '600', color: colors.text },
+  themeBtn: {
+    paddingVertical: spacing.md,
+    borderRadius: borderRadius.md,
+    borderWidth: 2,
+    borderColor: colors.primary,
+    alignItems: 'center',
+    marginTop: spacing.md,
+  },
+  themeBtnText: { color: colors.primary, fontSize: fontSize.md, fontWeight: '700' },
   resetBtn: {
     paddingVertical: spacing.md,
     borderRadius: borderRadius.md,

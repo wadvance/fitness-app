@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
 import { useApp } from '../store/AppContext';
-import { colors, spacing, fontSize, borderRadius, shadows } from '../styles/theme';
+import { useTheme, spacing, fontSize, borderRadius, shadows } from '../styles/theme';
 import { DAYS_OF_WEEK } from '../utils/constants';
 import BMIChart from '../components/BMIChart';
 import MacroPieChart from '../components/MacroPieChart';
@@ -9,6 +9,8 @@ import CalorieProgress from '../components/CalorieProgress';
 import { calculateBMI } from '../utils/calculations';
 
 export default function HomeScreen({ navigation }: any) {
+  const { colors } = useTheme();
+  const styles = useMemo(() => createStyles(colors), [colors]);
   const { state } = useApp();
   const { profile, caloricNeeds, workoutPlan, dietPlan } = state;
 
@@ -107,7 +109,7 @@ export default function HomeScreen({ navigation }: any) {
   );
 }
 
-const styles = StyleSheet.create({
+const createStyles = (colors: ReturnType<typeof useTheme>['colors']) => StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.background },
   content: { padding: spacing.lg, paddingBottom: spacing.xxl },
   greeting: {

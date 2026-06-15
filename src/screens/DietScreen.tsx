@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
 import { useApp } from '../store/AppContext';
-import { colors, spacing, fontSize, borderRadius, shadows } from '../styles/theme';
+import { useTheme, spacing, fontSize, borderRadius, shadows } from '../styles/theme';
 import MealCard from '../components/MealCard';
 import CalorieProgress from '../components/CalorieProgress';
 import { recipes as allRecipes } from '../data/recipes';
 
 export default function DietScreen({ navigation }: any) {
+  const { colors } = useTheme();
+  const styles = useMemo(() => createStyles(colors), [colors]);
   const { state, dispatch } = useApp();
   const { dietPlan } = state;
   const [selectedDay, setSelectedDay] = useState(0);
@@ -107,7 +109,7 @@ export default function DietScreen({ navigation }: any) {
   );
 }
 
-const styles = StyleSheet.create({
+const createStyles = (colors: ReturnType<typeof useTheme>['colors']) => StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.background },
   content: { padding: spacing.lg, paddingBottom: spacing.xxl },
   emptyContainer: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: spacing.xl },

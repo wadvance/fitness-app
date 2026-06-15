@@ -1,15 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import {
   View, Text, TextInput, TouchableOpacity, ScrollView,
   StyleSheet, KeyboardAvoidingView, Platform,
 } from 'react-native';
 import { useApp } from '../store/AppContext';
 import { UserProfile, Sex, ActivityLevel, Goal, Equipment } from '../models/UserProfile';
-import { colors, spacing, fontSize, borderRadius, shadows } from '../styles/theme';
+import { useTheme, spacing, fontSize, borderRadius, shadows } from '../styles/theme';
 import { ACTIVITY_LABELS, GOAL_LABELS, EQUIPMENT_LABELS } from '../utils/constants';
 import { calculateBMI, calculateCaloricNeeds } from '../utils/calculations';
 
 export default function OnboardingScreen() {
+  const { colors } = useTheme();
+  const styles = useMemo(() => createStyles(colors), [colors]);
   const { dispatch } = useApp();
   const [step, setStep] = useState(0);
   const [profile, setProfile] = useState<Partial<UserProfile>>({
@@ -28,7 +30,6 @@ export default function OnboardingScreen() {
   };
 
   const steps = [
-    // Step 0: Basic info
     <View key="step0" style={styles.stepContainer}>
       <Text style={styles.stepTitle}>Datos básicos</Text>
       <Text style={styles.stepSubtitle}>Cuéntanos sobre ti para personalizar tu experiencia</Text>
@@ -53,18 +54,17 @@ export default function OnboardingScreen() {
         onChangeText={t => updateProfile('weight', parseFloat(t) || 0)}
       />
 
-      <Text style={styles.label}>Estatura (cm)</Text>
+      <Text style={styles.label}>Estatura (in)</Text>
       <TextInput
         style={styles.input}
         keyboardType="decimal-pad"
-        placeholder="Ej: 170"
+        placeholder="Ej: 67"
         placeholderTextColor={colors.textLight}
         value={profile.height?.toString() || ''}
         onChangeText={t => updateProfile('height', parseFloat(t) || 0)}
       />
     </View>,
 
-    // Step 1: Sex and Activity
     <View key="step1" style={styles.stepContainer}>
       <Text style={styles.stepTitle}>Sexo y actividad</Text>
       <Text style={styles.stepSubtitle}>Selecciona tu sexo biológico y nivel de actividad</Text>
@@ -99,7 +99,6 @@ export default function OnboardingScreen() {
       ))}
     </View>,
 
-    // Step 2: Goals and Equipment
     <View key="step2" style={styles.stepContainer}>
       <Text style={styles.stepTitle}>Objetivo y equipo</Text>
       <Text style={styles.stepSubtitle}>¿Qué quieres lograr y con qué equipo cuentas?</Text>
@@ -133,7 +132,6 @@ export default function OnboardingScreen() {
       ))}
     </View>,
 
-    // Step 3: Summary
     <View key="step3" style={styles.stepContainer}>
       <Text style={styles.stepTitle}>Tu resumen</Text>
       <Text style={styles.stepSubtitle}>Basado en tus datos, calculamos lo siguiente:</Text>
@@ -220,7 +218,7 @@ export default function OnboardingScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const createStyles = (colors: ReturnType<typeof useTheme>['colors']) => StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.background },
   scrollContent: { padding: spacing.lg, paddingTop: spacing.xxl },
   progressContainer: {

@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { colors, spacing, fontSize, borderRadius } from '../styles/theme';
+import { useTheme, spacing, fontSize, borderRadius } from '../styles/theme';
 
 interface Props {
   consumed: number;
@@ -9,6 +9,9 @@ interface Props {
 }
 
 export default function CalorieProgress({ consumed, goal, label }: Props) {
+  const { colors } = useTheme();
+  const styles = useMemo(() => createStyles(colors), [colors]);
+
   const percentage = Math.min((consumed / goal) * 100, 100);
   const remaining = goal - consumed;
 
@@ -26,7 +29,7 @@ export default function CalorieProgress({ consumed, goal, label }: Props) {
   );
 }
 
-const styles = StyleSheet.create({
+const createStyles = (colors: ReturnType<typeof useTheme>['colors']) => StyleSheet.create({
   container: {
     marginVertical: spacing.sm,
   },

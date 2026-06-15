@@ -1,8 +1,9 @@
 import { UserProfile, BMIResult, CaloricNeeds } from '../models/UserProfile';
 import { ACTIVITY_MULTIPLIERS, CALORIE_DEFICIT_FACTOR, PROTEIN_PER_KG, FAT_PERCENT, CARBS_PERCENT } from './constants';
 
-export function calculateBMI(weight: number, height: number): BMIResult {
-  const heightM = height / 100;
+export function calculateBMI(weight: number, heightInches: number): BMIResult {
+  const heightCm = heightInches * 2.54;
+  const heightM = heightCm / 100;
   const bmi = weight / (heightM * heightM);
 
   let category: string;

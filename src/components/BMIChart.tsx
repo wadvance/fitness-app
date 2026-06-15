@@ -1,13 +1,16 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { BMIResult } from '../models/UserProfile';
-import { colors, spacing, borderRadius } from '../styles/theme';
+import { useTheme, lightColors, spacing, borderRadius } from '../styles/theme';
 
 interface Props {
   bmi: BMIResult;
 }
 
 export default function BMIChart({ bmi }: Props) {
+  const { colors } = useTheme();
+  const styles = useMemo(() => createStyles(colors), [colors]);
+
   const maxScale = 40;
   const position = Math.min((bmi.value / maxScale) * 100, 100);
 
@@ -24,7 +27,7 @@ export default function BMIChart({ bmi }: Props) {
   );
 }
 
-const styles = StyleSheet.create({
+const createStyles = (colors: typeof lightColors) => StyleSheet.create({
   container: {
     height: 20,
     position: 'relative',

@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { colors, spacing, fontSize, borderRadius } from '../styles/theme';
+import { useTheme, spacing, fontSize, borderRadius } from '../styles/theme';
 
 interface MacroData {
   protein: number;
@@ -17,6 +17,9 @@ interface Props {
 }
 
 export default function MacroPieChart({ data }: Props) {
+  const { colors } = useTheme();
+  const styles = useMemo(() => createStyles(colors), [colors]);
+
   const pProtein = data.total > 0 ? (data.proteinCal / data.total) * 100 : 0;
   const pCarbs = data.total > 0 ? (data.carbsCal / data.total) * 100 : 0;
   const pFat = data.total > 0 ? (data.fatCal / data.total) * 100 : 0;
@@ -46,7 +49,7 @@ export default function MacroPieChart({ data }: Props) {
   );
 }
 
-const styles = StyleSheet.create({
+const createStyles = (colors: ReturnType<typeof useTheme>['colors']) => StyleSheet.create({
   container: {
     marginVertical: spacing.sm,
   },
